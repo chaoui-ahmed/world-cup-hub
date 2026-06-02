@@ -9,38 +9,92 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as MatchesRouteImport } from './routes/matches'
+import { Route as InjuriesRouteImport } from './routes/injuries'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TeamsIndexRouteImport } from './routes/teams.index'
+import { Route as TeamsTeamIdRouteImport } from './routes/teams.$teamId'
 
+const MatchesRoute = MatchesRouteImport.update({
+  id: '/matches',
+  path: '/matches',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InjuriesRoute = InjuriesRouteImport.update({
+  id: '/injuries',
+  path: '/injuries',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TeamsIndexRoute = TeamsIndexRouteImport.update({
+  id: '/teams/',
+  path: '/teams/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TeamsTeamIdRoute = TeamsTeamIdRouteImport.update({
+  id: '/teams/$teamId',
+  path: '/teams/$teamId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/injuries': typeof InjuriesRoute
+  '/matches': typeof MatchesRoute
+  '/teams/$teamId': typeof TeamsTeamIdRoute
+  '/teams/': typeof TeamsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/injuries': typeof InjuriesRoute
+  '/matches': typeof MatchesRoute
+  '/teams/$teamId': typeof TeamsTeamIdRoute
+  '/teams': typeof TeamsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/injuries': typeof InjuriesRoute
+  '/matches': typeof MatchesRoute
+  '/teams/$teamId': typeof TeamsTeamIdRoute
+  '/teams/': typeof TeamsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/injuries' | '/matches' | '/teams/$teamId' | '/teams/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/injuries' | '/matches' | '/teams/$teamId' | '/teams'
+  id: '__root__' | '/' | '/injuries' | '/matches' | '/teams/$teamId' | '/teams/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  InjuriesRoute: typeof InjuriesRoute
+  MatchesRoute: typeof MatchesRoute
+  TeamsTeamIdRoute: typeof TeamsTeamIdRoute
+  TeamsIndexRoute: typeof TeamsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/matches': {
+      id: '/matches'
+      path: '/matches'
+      fullPath: '/matches'
+      preLoaderRoute: typeof MatchesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/injuries': {
+      id: '/injuries'
+      path: '/injuries'
+      fullPath: '/injuries'
+      preLoaderRoute: typeof InjuriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +102,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/teams/': {
+      id: '/teams/'
+      path: '/teams'
+      fullPath: '/teams/'
+      preLoaderRoute: typeof TeamsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/teams/$teamId': {
+      id: '/teams/$teamId'
+      path: '/teams/$teamId'
+      fullPath: '/teams/$teamId'
+      preLoaderRoute: typeof TeamsTeamIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  InjuriesRoute: InjuriesRoute,
+  MatchesRoute: MatchesRoute,
+  TeamsTeamIdRoute: TeamsTeamIdRoute,
+  TeamsIndexRoute: TeamsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
