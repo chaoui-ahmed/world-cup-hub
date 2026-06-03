@@ -1,4 +1,4 @@
-import { TIMEZONES } from "@/lib/wc-data";
+import { TIMEZONES, DEFAULT_TZ } from "@/lib/wc-data";
 
 export function TimezoneSelect({
   value,
@@ -11,7 +11,7 @@ export function TimezoneSelect({
 }) {
   return (
     <label className="flex items-center gap-2 text-sm text-neutral-600">
-      <span className="text-xs uppercase tracking-wider text-neutral-500">{label}</span>
+      {label && <span className="text-xs uppercase tracking-wider text-neutral-500">{label}</span>}
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -25,14 +25,13 @@ export function TimezoneSelect({
   );
 }
 
+// Default is the editorial "Heure de Paris" (Europe/Paris). Users can override
+// via the selector; their choice persists in localStorage.
 export function getInitialTimezone(): string {
-  if (typeof window === "undefined") return "UTC";
+  if (typeof window === "undefined") return DEFAULT_TZ;
   try {
     const saved = window.localStorage.getItem("wc-tz");
     if (saved) return saved;
-    const guess = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    return guess || "UTC";
-  } catch {
-    return "UTC";
-  }
+  } catch {}
+  return DEFAULT_TZ;
 }
