@@ -1,17 +1,19 @@
-// World Cup 2026 dataset (illustrative / mock data for demo purposes).
+// World Cup 2026 dataset.
 // USA · Canada · Mexico · June 11 – July 19, 2026 · 48 teams, 12 groups.
+// Team brand colors are official national palettes (hex). Match times stored in UTC,
+// displayed in Europe/Paris by default per the editorial spec.
 
 export type Team = {
   id: string;
   name: string;
-  code: string; // 3-letter
-  flag: string; // emoji
-  group: string; // "A".."L"
+  code: string;
+  flag: string;
+  group: string;
   confederation: string;
   fifaRank: number;
-  primary: string; // oklch
-  secondary: string;
-  accent: string;
+  primary: string;   // hex
+  secondary: string; // hex
+  accent: string;    // hex
   coach: string;
   captain: string;
   stadium: string;
@@ -30,7 +32,7 @@ export type Player = {
   caps: number;
   goals: number;
   assists?: number;
-  rating: number; // 0-10
+  rating: number;
   notes: string;
 };
 
@@ -40,8 +42,9 @@ export type Match = {
   stage: "Group" | "R32" | "R16" | "QF" | "SF" | "3rd" | "Final";
   homeId: string;
   awayId: string;
-  kickoffUTC: string; // ISO
+  kickoffUTC: string;
   venue: string;
+  venueId: string;
   city: string;
   status: "scheduled" | "live" | "finished";
   homeScore?: number;
@@ -54,87 +57,88 @@ export type Injury = {
   injury: string;
   status: "Out" | "Doubtful" | "Returning";
   expected: string;
+  updated: string;
 };
 
-// --- 48 Teams, 12 groups ----------------------------------------------------
+// --- 48 Teams with official brand colors -----------------------------------
 
 export const TEAMS: Team[] = [
   // Group A
-  { id: "mex", name: "Mexico", code: "MEX", flag: "🇲🇽", group: "A", confederation: "CONCACAF", fifaRank: 14, primary: "oklch(0.45 0.18 150)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.55 0.22 25)", coach: "Javier Aguirre", captain: "Edson Álvarez", stadium: "Estadio Azteca", style: "High pressing, quick wing play, vertical transitions.", formation: "4-3-3", recentForm: ["W","W","D","L","W"], titles: 0 },
-  { id: "uru", name: "Uruguay", code: "URU", flag: "🇺🇾", group: "A", confederation: "CONMEBOL", fifaRank: 11, primary: "oklch(0.55 0.18 250)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.85 0.15 90)", coach: "Marcelo Bielsa", captain: "Federico Valverde", stadium: "Estadio Centenario", style: "Aggressive man-marking, vertical attacks under Bielsa.", formation: "3-3-1-3", recentForm: ["W","W","W","D","W"], titles: 2 },
-  { id: "ned", name: "Netherlands", code: "NED", flag: "🇳🇱", group: "A", confederation: "UEFA", fifaRank: 6, primary: "oklch(0.7 0.2 60)", secondary: "oklch(0.2 0 0)", accent: "oklch(0.98 0 0)", coach: "Ronald Koeman", captain: "Virgil van Dijk", stadium: "Johan Cruyff Arena", style: "Possession-based, build-up from the back.", formation: "4-2-3-1", recentForm: ["W","D","W","W","L"], titles: 0 },
-  { id: "iri", name: "Iran", code: "IRN", flag: "🇮🇷", group: "A", confederation: "AFC", fifaRank: 20, primary: "oklch(0.5 0.2 25)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.45 0.18 150)", coach: "Amir Ghalenoei", captain: "Alireza Jahanbakhsh", stadium: "Azadi Stadium", style: "Compact low block, counter-attacks.", formation: "4-1-4-1", recentForm: ["W","L","W","D","W"], titles: 0 },
+  { id: "mex", name: "Mexico", code: "MEX", flag: "🇲🇽", group: "A", confederation: "CONCACAF", fifaRank: 14, primary: "#006847", secondary: "#FFFFFF", accent: "#CE1126", coach: "Javier Aguirre", captain: "Edson Álvarez", stadium: "Estadio Azteca", style: "High pressing, quick wing play, vertical transitions.", formation: "4-3-3", recentForm: ["W","W","D","L","W"], titles: 0 },
+  { id: "uru", name: "Uruguay", code: "URU", flag: "🇺🇾", group: "A", confederation: "CONMEBOL", fifaRank: 11, primary: "#0093DD", secondary: "#FFFFFF", accent: "#000000", coach: "Marcelo Bielsa", captain: "Federico Valverde", stadium: "Estadio Centenario", style: "Aggressive man-marking, vertical attacks under Bielsa.", formation: "3-3-1-3", recentForm: ["W","W","W","D","W"], titles: 2 },
+  { id: "ned", name: "Netherlands", code: "NED", flag: "🇳🇱", group: "A", confederation: "UEFA", fifaRank: 6, primary: "#FF6900", secondary: "#000000", accent: "#FFFFFF", coach: "Ronald Koeman", captain: "Virgil van Dijk", stadium: "Johan Cruyff Arena", style: "Possession-based, build-up from the back.", formation: "4-2-3-1", recentForm: ["W","D","W","W","L"], titles: 0 },
+  { id: "iri", name: "Iran", code: "IRN", flag: "🇮🇷", group: "A", confederation: "AFC", fifaRank: 20, primary: "#239F40", secondary: "#FFFFFF", accent: "#DA0000", coach: "Amir Ghalenoei", captain: "Alireza Jahanbakhsh", stadium: "Azadi Stadium", style: "Compact low block, counter-attacks.", formation: "4-1-4-1", recentForm: ["W","L","W","D","W"], titles: 0 },
 
   // Group B
-  { id: "can", name: "Canada", code: "CAN", flag: "🇨🇦", group: "B", confederation: "CONCACAF", fifaRank: 38, primary: "oklch(0.55 0.22 25)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.25 0.05 25)", coach: "Jesse Marsch", captain: "Alphonso Davies", stadium: "BMO Field", style: "Direct, energetic, exploits pace on the flanks.", formation: "4-2-3-1", recentForm: ["W","W","L","W","D"], titles: 0 },
-  { id: "bel", name: "Belgium", code: "BEL", flag: "🇧🇪", group: "B", confederation: "UEFA", fifaRank: 8, primary: "oklch(0.55 0.18 25)", secondary: "oklch(0.85 0.15 90)", accent: "oklch(0.2 0 0)", coach: "Domenico Tedesco", captain: "Kevin De Bruyne", stadium: "King Baudouin", style: "Creative midfield, technical build-up.", formation: "3-4-2-1", recentForm: ["W","D","W","W","W"], titles: 0 },
-  { id: "jpn", name: "Japan", code: "JPN", flag: "🇯🇵", group: "B", confederation: "AFC", fifaRank: 17, primary: "oklch(0.55 0.18 250)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.55 0.22 25)", coach: "Hajime Moriyasu", captain: "Wataru Endo", stadium: "International Stadium Yokohama", style: "Quick combination play, intense pressing.", formation: "4-2-3-1", recentForm: ["W","W","W","D","W"], titles: 0 },
-  { id: "mar", name: "Morocco", code: "MAR", flag: "🇲🇦", group: "B", confederation: "CAF", fifaRank: 13, primary: "oklch(0.45 0.18 25)", secondary: "oklch(0.45 0.18 150)", accent: "oklch(0.98 0 0)", coach: "Walid Regragui", captain: "Hakim Ziyech", stadium: "Stade Mohammed V", style: "Disciplined defense, lethal on transitions.", formation: "4-3-3", recentForm: ["W","W","W","W","D"], titles: 0 },
+  { id: "can", name: "Canada", code: "CAN", flag: "🇨🇦", group: "B", confederation: "CONCACAF", fifaRank: 38, primary: "#FF0000", secondary: "#FFFFFF", accent: "#000000", coach: "Jesse Marsch", captain: "Alphonso Davies", stadium: "BMO Field", style: "Direct, energetic, exploits pace on the flanks.", formation: "4-2-3-1", recentForm: ["W","W","L","W","D"], titles: 0 },
+  { id: "bel", name: "Belgium", code: "BEL", flag: "🇧🇪", group: "B", confederation: "UEFA", fifaRank: 8, primary: "#ED2939", secondary: "#FAE042", accent: "#000000", coach: "Domenico Tedesco", captain: "Kevin De Bruyne", stadium: "King Baudouin", style: "Creative midfield, technical build-up.", formation: "3-4-2-1", recentForm: ["W","D","W","W","W"], titles: 0 },
+  { id: "jpn", name: "Japan", code: "JPN", flag: "🇯🇵", group: "B", confederation: "AFC", fifaRank: 17, primary: "#0033A0", secondary: "#FFFFFF", accent: "#BC002D", coach: "Hajime Moriyasu", captain: "Wataru Endo", stadium: "International Stadium Yokohama", style: "Quick combination play, intense pressing.", formation: "4-2-3-1", recentForm: ["W","W","W","D","W"], titles: 0 },
+  { id: "mar", name: "Morocco", code: "MAR", flag: "🇲🇦", group: "B", confederation: "CAF", fifaRank: 13, primary: "#C1272D", secondary: "#006233", accent: "#FFFFFF", coach: "Walid Regragui", captain: "Hakim Ziyech", stadium: "Stade Mohammed V", style: "Disciplined defense, lethal on transitions.", formation: "4-3-3", recentForm: ["W","W","W","W","D"], titles: 0 },
 
   // Group C
-  { id: "usa", name: "United States", code: "USA", flag: "🇺🇸", group: "C", confederation: "CONCACAF", fifaRank: 16, primary: "oklch(0.4 0.18 260)", secondary: "oklch(0.55 0.22 25)", accent: "oklch(0.98 0 0)", coach: "Mauricio Pochettino", captain: "Christian Pulisic", stadium: "MetLife Stadium", style: "Athletic, high-energy pressing, ball-playing fullbacks.", formation: "4-3-3", recentForm: ["W","W","D","W","L"], titles: 0 },
-  { id: "ger", name: "Germany", code: "GER", flag: "🇩🇪", group: "C", confederation: "UEFA", fifaRank: 9, primary: "oklch(0.25 0.02 0)", secondary: "oklch(0.55 0.22 25)", accent: "oklch(0.85 0.18 95)", coach: "Julian Nagelsmann", captain: "Joshua Kimmich", stadium: "Allianz Arena", style: "Positional play, structured high press.", formation: "4-2-3-1", recentForm: ["W","W","W","D","W"], titles: 4 },
-  { id: "kor", name: "South Korea", code: "KOR", flag: "🇰🇷", group: "C", confederation: "AFC", fifaRank: 22, primary: "oklch(0.55 0.18 25)", secondary: "oklch(0.4 0.18 260)", accent: "oklch(0.98 0 0)", coach: "Hong Myung-bo", captain: "Son Heung-min", stadium: "Seoul World Cup Stadium", style: "Fast, vertical, technically sharp.", formation: "4-2-3-1", recentForm: ["W","D","W","W","L"], titles: 0 },
-  { id: "ecu", name: "Ecuador", code: "ECU", flag: "🇪🇨", group: "C", confederation: "CONMEBOL", fifaRank: 31, primary: "oklch(0.85 0.18 95)", secondary: "oklch(0.4 0.18 260)", accent: "oklch(0.55 0.22 25)", coach: "Sebastián Beccacece", captain: "Enner Valencia", stadium: "Estadio Monumental", style: "Physical midfield, organized defense.", formation: "4-4-2", recentForm: ["D","W","W","D","W"], titles: 0 },
+  { id: "usa", name: "United States", code: "USA", flag: "🇺🇸", group: "C", confederation: "CONCACAF", fifaRank: 16, primary: "#0A2240", secondary: "#BF0A30", accent: "#FFFFFF", coach: "Mauricio Pochettino", captain: "Christian Pulisic", stadium: "MetLife Stadium", style: "Athletic, high-energy pressing, ball-playing fullbacks.", formation: "4-3-3", recentForm: ["W","W","D","W","L"], titles: 0 },
+  { id: "ger", name: "Germany", code: "GER", flag: "🇩🇪", group: "C", confederation: "UEFA", fifaRank: 9, primary: "#000000", secondary: "#DD0000", accent: "#FFCE00", coach: "Julian Nagelsmann", captain: "Joshua Kimmich", stadium: "Allianz Arena", style: "Positional play, structured high press.", formation: "4-2-3-1", recentForm: ["W","W","W","D","W"], titles: 4 },
+  { id: "kor", name: "South Korea", code: "KOR", flag: "🇰🇷", group: "C", confederation: "AFC", fifaRank: 22, primary: "#CD2E3A", secondary: "#003478", accent: "#FFFFFF", coach: "Hong Myung-bo", captain: "Son Heung-min", stadium: "Seoul World Cup Stadium", style: "Fast, vertical, technically sharp.", formation: "4-2-3-1", recentForm: ["W","D","W","W","L"], titles: 0 },
+  { id: "ecu", name: "Ecuador", code: "ECU", flag: "🇪🇨", group: "C", confederation: "CONMEBOL", fifaRank: 31, primary: "#FFD100", secondary: "#034EA2", accent: "#ED1C24", coach: "Sebastián Beccacece", captain: "Enner Valencia", stadium: "Estadio Monumental", style: "Physical midfield, organized defense.", formation: "4-4-2", recentForm: ["D","W","W","D","W"], titles: 0 },
 
   // Group D
-  { id: "fra", name: "France", code: "FRA", flag: "🇫🇷", group: "D", confederation: "UEFA", fifaRank: 2, primary: "oklch(0.4 0.18 260)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.55 0.22 25)", coach: "Didier Deschamps", captain: "Kylian Mbappé", stadium: "Stade de France", style: "Compact 4-3-3 with devastating counter-attacks.", formation: "4-3-3", recentForm: ["W","W","W","W","D"], titles: 2 },
-  { id: "sen", name: "Senegal", code: "SEN", flag: "🇸🇳", group: "D", confederation: "CAF", fifaRank: 19, primary: "oklch(0.45 0.18 150)", secondary: "oklch(0.85 0.18 95)", accent: "oklch(0.55 0.22 25)", coach: "Pape Thiaw", captain: "Kalidou Koulibaly", stadium: "Stade Abdoulaye Wade", style: "Power, pace, dominant in duels.", formation: "4-3-3", recentForm: ["W","W","D","W","W"], titles: 0 },
-  { id: "aus", name: "Australia", code: "AUS", flag: "🇦🇺", group: "D", confederation: "AFC", fifaRank: 25, primary: "oklch(0.45 0.18 150)", secondary: "oklch(0.85 0.18 95)", accent: "oklch(0.98 0 0)", coach: "Tony Popovic", captain: "Mathew Ryan", stadium: "Stadium Australia", style: "Organized, hard-working, set-piece threat.", formation: "4-2-3-1", recentForm: ["W","D","W","L","W"], titles: 0 },
-  { id: "qat", name: "Qatar", code: "QAT", flag: "🇶🇦", group: "D", confederation: "AFC", fifaRank: 36, primary: "oklch(0.35 0.12 25)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.7 0.15 60)", coach: "Tintín Márquez", captain: "Hassan Al-Haydos", stadium: "Lusail Stadium", style: "Possession, patient build-up.", formation: "5-3-2", recentForm: ["D","W","L","W","D"], titles: 0 },
+  { id: "fra", name: "France", code: "FRA", flag: "🇫🇷", group: "D", confederation: "UEFA", fifaRank: 2, primary: "#002654", secondary: "#FFFFFF", accent: "#ED2939", coach: "Didier Deschamps", captain: "Kylian Mbappé", stadium: "Stade de France", style: "Compact 4-3-3 with devastating counter-attacks.", formation: "4-3-3", recentForm: ["W","W","W","W","D"], titles: 2 },
+  { id: "sen", name: "Senegal", code: "SEN", flag: "🇸🇳", group: "D", confederation: "CAF", fifaRank: 19, primary: "#00853F", secondary: "#FDEF42", accent: "#E31B23", coach: "Pape Thiaw", captain: "Kalidou Koulibaly", stadium: "Stade Abdoulaye Wade", style: "Power, pace, dominant in duels.", formation: "4-3-3", recentForm: ["W","W","D","W","W"], titles: 0 },
+  { id: "aus", name: "Australia", code: "AUS", flag: "🇦🇺", group: "D", confederation: "AFC", fifaRank: 25, primary: "#00843D", secondary: "#FFCD00", accent: "#FFFFFF", coach: "Tony Popovic", captain: "Mathew Ryan", stadium: "Stadium Australia", style: "Organized, hard-working, set-piece threat.", formation: "4-2-3-1", recentForm: ["W","D","W","L","W"], titles: 0 },
+  { id: "qat", name: "Qatar", code: "QAT", flag: "🇶🇦", group: "D", confederation: "AFC", fifaRank: 36, primary: "#8A1538", secondary: "#FFFFFF", accent: "#C49A6C", coach: "Tintín Márquez", captain: "Hassan Al-Haydos", stadium: "Lusail Stadium", style: "Possession, patient build-up.", formation: "5-3-2", recentForm: ["D","W","L","W","D"], titles: 0 },
 
   // Group E
-  { id: "arg", name: "Argentina", code: "ARG", flag: "🇦🇷", group: "E", confederation: "CONMEBOL", fifaRank: 1, primary: "oklch(0.7 0.12 230)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.2 0 0)", coach: "Lionel Scaloni", captain: "Lionel Messi", stadium: "Estadio Monumental", style: "Balanced, technical, ruthless transitions.", formation: "4-4-2", recentForm: ["W","W","W","D","W"], titles: 3 },
-  { id: "ned2", name: "Norway", code: "NOR", flag: "🇳🇴", group: "E", confederation: "UEFA", fifaRank: 33, primary: "oklch(0.4 0.18 260)", secondary: "oklch(0.55 0.22 25)", accent: "oklch(0.98 0 0)", coach: "Ståle Solbakken", captain: "Martin Ødegaard", stadium: "Ullevaal Stadion", style: "Direct, Haaland-led vertical attacks.", formation: "4-3-3", recentForm: ["W","W","W","W","D"], titles: 0 },
-  { id: "nzl", name: "New Zealand", code: "NZL", flag: "🇳🇿", group: "E", confederation: "OFC", fifaRank: 88, primary: "oklch(0.2 0 0)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.55 0.22 25)", coach: "Darren Bazeley", captain: "Chris Wood", stadium: "Eden Park", style: "Physical, defensively compact, aerial threat.", formation: "5-4-1", recentForm: ["W","L","W","D","L"], titles: 0 },
-  { id: "tun", name: "Tunisia", code: "TUN", flag: "🇹🇳", group: "E", confederation: "CAF", fifaRank: 41, primary: "oklch(0.5 0.2 25)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.25 0 0)", coach: "Sami Trabelsi", captain: "Youssef Msakni", stadium: "Stade Hammadi Agrebi", style: "Low block, set-piece reliant.", formation: "4-1-4-1", recentForm: ["D","W","L","D","W"], titles: 0 },
+  { id: "arg", name: "Argentina", code: "ARG", flag: "🇦🇷", group: "E", confederation: "CONMEBOL", fifaRank: 1, primary: "#75AADB", secondary: "#FFFFFF", accent: "#F6B40E", coach: "Lionel Scaloni", captain: "Lionel Messi", stadium: "Estadio Monumental", style: "Balanced, technical, ruthless transitions.", formation: "4-4-2", recentForm: ["W","W","W","D","W"], titles: 3 },
+  { id: "ned2", name: "Norway", code: "NOR", flag: "🇳🇴", group: "E", confederation: "UEFA", fifaRank: 33, primary: "#BA0C2F", secondary: "#00205B", accent: "#FFFFFF", coach: "Ståle Solbakken", captain: "Martin Ødegaard", stadium: "Ullevaal Stadion", style: "Direct, Haaland-led vertical attacks.", formation: "4-3-3", recentForm: ["W","W","W","W","D"], titles: 0 },
+  { id: "nzl", name: "New Zealand", code: "NZL", flag: "🇳🇿", group: "E", confederation: "OFC", fifaRank: 88, primary: "#000000", secondary: "#FFFFFF", accent: "#CC0000", coach: "Darren Bazeley", captain: "Chris Wood", stadium: "Eden Park", style: "Physical, defensively compact, aerial threat.", formation: "5-4-1", recentForm: ["W","L","W","D","L"], titles: 0 },
+  { id: "tun", name: "Tunisia", code: "TUN", flag: "🇹🇳", group: "E", confederation: "CAF", fifaRank: 41, primary: "#E70013", secondary: "#FFFFFF", accent: "#000000", coach: "Sami Trabelsi", captain: "Youssef Msakni", stadium: "Stade Hammadi Agrebi", style: "Low block, set-piece reliant.", formation: "4-1-4-1", recentForm: ["D","W","L","D","W"], titles: 0 },
 
   // Group F
-  { id: "esp", name: "Spain", code: "ESP", flag: "🇪🇸", group: "F", confederation: "UEFA", fifaRank: 3, primary: "oklch(0.5 0.2 25)", secondary: "oklch(0.85 0.18 95)", accent: "oklch(0.98 0 0)", coach: "Luis de la Fuente", captain: "Rodri", stadium: "Santiago Bernabéu", style: "Possession + vertical wingers, dynamic press.", formation: "4-3-3", recentForm: ["W","W","W","W","W"], titles: 1 },
-  { id: "egy", name: "Egypt", code: "EGY", flag: "🇪🇬", group: "F", confederation: "CAF", fifaRank: 32, primary: "oklch(0.5 0.2 25)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.25 0 0)", coach: "Hossam Hassan", captain: "Mohamed Salah", stadium: "Cairo International Stadium", style: "Salah-centric, fast transitions.", formation: "4-2-3-1", recentForm: ["W","W","D","W","L"], titles: 0 },
-  { id: "ksa", name: "Saudi Arabia", code: "KSA", flag: "🇸🇦", group: "F", confederation: "AFC", fifaRank: 56, primary: "oklch(0.45 0.18 150)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.55 0.22 25)", coach: "Hervé Renard", captain: "Salem Al-Dawsari", stadium: "King Fahd Stadium", style: "Energetic press, technical wingers.", formation: "4-2-3-1", recentForm: ["D","W","L","W","D"], titles: 0 },
-  { id: "cri", name: "Costa Rica", code: "CRC", flag: "🇨🇷", group: "F", confederation: "CONCACAF", fifaRank: 47, primary: "oklch(0.5 0.2 25)", secondary: "oklch(0.4 0.18 260)", accent: "oklch(0.98 0 0)", coach: "Gustavo Alfaro", captain: "Keylor Navas", stadium: "Estadio Nacional", style: "Compact 5-4-1, Navas-anchored.", formation: "5-4-1", recentForm: ["L","D","W","D","W"], titles: 0 },
+  { id: "esp", name: "Spain", code: "ESP", flag: "🇪🇸", group: "F", confederation: "UEFA", fifaRank: 3, primary: "#C60B1E", secondary: "#FFC400", accent: "#FFFFFF", coach: "Luis de la Fuente", captain: "Rodri", stadium: "Santiago Bernabéu", style: "Possession + vertical wingers, dynamic press.", formation: "4-3-3", recentForm: ["W","W","W","W","W"], titles: 1 },
+  { id: "egy", name: "Egypt", code: "EGY", flag: "🇪🇬", group: "F", confederation: "CAF", fifaRank: 32, primary: "#C8102E", secondary: "#FFFFFF", accent: "#000000", coach: "Hossam Hassan", captain: "Mohamed Salah", stadium: "Cairo International Stadium", style: "Salah-centric, fast transitions.", formation: "4-2-3-1", recentForm: ["W","W","D","W","L"], titles: 0 },
+  { id: "ksa", name: "Saudi Arabia", code: "KSA", flag: "🇸🇦", group: "F", confederation: "AFC", fifaRank: 56, primary: "#006C35", secondary: "#FFFFFF", accent: "#C5A572", coach: "Hervé Renard", captain: "Salem Al-Dawsari", stadium: "King Fahd Stadium", style: "Energetic press, technical wingers.", formation: "4-2-3-1", recentForm: ["D","W","L","W","D"], titles: 0 },
+  { id: "cri", name: "Costa Rica", code: "CRC", flag: "🇨🇷", group: "F", confederation: "CONCACAF", fifaRank: 47, primary: "#002B7F", secondary: "#CE1126", accent: "#FFFFFF", coach: "Gustavo Alfaro", captain: "Keylor Navas", stadium: "Estadio Nacional", style: "Compact 5-4-1, Navas-anchored.", formation: "5-4-1", recentForm: ["L","D","W","D","W"], titles: 0 },
 
   // Group G
-  { id: "bra", name: "Brazil", code: "BRA", flag: "🇧🇷", group: "G", confederation: "CONMEBOL", fifaRank: 5, primary: "oklch(0.7 0.18 145)", secondary: "oklch(0.85 0.18 95)", accent: "oklch(0.4 0.18 260)", coach: "Carlo Ancelotti", captain: "Vinicius Jr.", stadium: "Maracanã", style: "Skillful wingers, fluid attacking play.", formation: "4-2-3-1", recentForm: ["W","W","D","W","W"], titles: 5 },
-  { id: "sui", name: "Switzerland", code: "SUI", flag: "🇨🇭", group: "G", confederation: "UEFA", fifaRank: 21, primary: "oklch(0.55 0.22 25)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.2 0 0)", coach: "Murat Yakin", captain: "Granit Xhaka", stadium: "St. Jakob-Park", style: "Disciplined, organized, set-piece strong.", formation: "3-4-2-1", recentForm: ["W","D","W","W","L"], titles: 0 },
-  { id: "cmr", name: "Cameroon", code: "CMR", flag: "🇨🇲", group: "G", confederation: "CAF", fifaRank: 42, primary: "oklch(0.45 0.18 150)", secondary: "oklch(0.55 0.22 25)", accent: "oklch(0.85 0.18 95)", coach: "Marc Brys", captain: "Vincent Aboubakar", stadium: "Olembe Stadium", style: "Physical, athletic, direct play.", formation: "4-3-3", recentForm: ["D","W","L","W","D"], titles: 0 },
-  { id: "uzb", name: "Uzbekistan", code: "UZB", flag: "🇺🇿", group: "G", confederation: "AFC", fifaRank: 57, primary: "oklch(0.55 0.18 250)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.45 0.18 150)", coach: "Timur Kapadze", captain: "Eldor Shomurodov", stadium: "Milliy Stadium", style: "Compact mid-block, quick counters.", formation: "4-2-3-1", recentForm: ["W","D","W","D","L"], titles: 0 },
+  { id: "bra", name: "Brazil", code: "BRA", flag: "🇧🇷", group: "G", confederation: "CONMEBOL", fifaRank: 5, primary: "#009C3B", secondary: "#FFDF00", accent: "#002776", coach: "Carlo Ancelotti", captain: "Vinicius Jr.", stadium: "Maracanã", style: "Skillful wingers, fluid attacking play.", formation: "4-2-3-1", recentForm: ["W","W","D","W","W"], titles: 5 },
+  { id: "sui", name: "Switzerland", code: "SUI", flag: "🇨🇭", group: "G", confederation: "UEFA", fifaRank: 21, primary: "#DA291C", secondary: "#FFFFFF", accent: "#000000", coach: "Murat Yakin", captain: "Granit Xhaka", stadium: "St. Jakob-Park", style: "Disciplined, organized, set-piece strong.", formation: "3-4-2-1", recentForm: ["W","D","W","W","L"], titles: 0 },
+  { id: "cmr", name: "Cameroon", code: "CMR", flag: "🇨🇲", group: "G", confederation: "CAF", fifaRank: 42, primary: "#007A5E", secondary: "#CE1126", accent: "#FCD116", coach: "Marc Brys", captain: "Vincent Aboubakar", stadium: "Olembe Stadium", style: "Physical, athletic, direct play.", formation: "4-3-3", recentForm: ["D","W","L","W","D"], titles: 0 },
+  { id: "uzb", name: "Uzbekistan", code: "UZB", flag: "🇺🇿", group: "G", confederation: "AFC", fifaRank: 57, primary: "#1EB53A", secondary: "#FFFFFF", accent: "#0099B5", coach: "Timur Kapadze", captain: "Eldor Shomurodov", stadium: "Milliy Stadium", style: "Compact mid-block, quick counters.", formation: "4-2-3-1", recentForm: ["W","D","W","D","L"], titles: 0 },
 
   // Group H
-  { id: "eng", name: "England", code: "ENG", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", group: "H", confederation: "UEFA", fifaRank: 4, primary: "oklch(0.98 0 0)", secondary: "oklch(0.55 0.22 25)", accent: "oklch(0.4 0.18 260)", coach: "Thomas Tuchel", captain: "Harry Kane", stadium: "Wembley Stadium", style: "Possession-oriented, dynamic wide forwards.", formation: "4-2-3-1", recentForm: ["W","W","W","D","W"], titles: 1 },
-  { id: "civ", name: "Côte d'Ivoire", code: "CIV", flag: "🇨🇮", group: "H", confederation: "CAF", fifaRank: 39, primary: "oklch(0.7 0.2 60)", secondary: "oklch(0.45 0.18 150)", accent: "oklch(0.98 0 0)", coach: "Emerse Faé", captain: "Franck Kessié", stadium: "Stade Alassane Ouattara", style: "Power, fast transitions.", formation: "4-3-3", recentForm: ["W","W","D","W","L"], titles: 0 },
-  { id: "pan", name: "Panama", code: "PAN", flag: "🇵🇦", group: "H", confederation: "CONCACAF", fifaRank: 35, primary: "oklch(0.4 0.18 260)", secondary: "oklch(0.55 0.22 25)", accent: "oklch(0.98 0 0)", coach: "Thomas Christiansen", captain: "Aníbal Godoy", stadium: "Estadio Rommel Fernández", style: "Defensive resilience, counter-attacks.", formation: "4-4-2", recentForm: ["D","W","L","W","D"], titles: 0 },
-  { id: "irq", name: "Iraq", code: "IRQ", flag: "🇮🇶", group: "H", confederation: "AFC", fifaRank: 58, primary: "oklch(0.45 0.18 150)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.25 0 0)", coach: "Graham Arnold", captain: "Aymen Hussein", stadium: "Basra International", style: "Industrious, defensive base.", formation: "4-1-4-1", recentForm: ["L","W","D","D","W"], titles: 0 },
+  { id: "eng", name: "England", code: "ENG", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", group: "H", confederation: "UEFA", fifaRank: 4, primary: "#FFFFFF", secondary: "#C8102E", accent: "#00247D", coach: "Thomas Tuchel", captain: "Harry Kane", stadium: "Wembley Stadium", style: "Possession-oriented, dynamic wide forwards.", formation: "4-2-3-1", recentForm: ["W","W","W","D","W"], titles: 1 },
+  { id: "civ", name: "Côte d'Ivoire", code: "CIV", flag: "🇨🇮", group: "H", confederation: "CAF", fifaRank: 39, primary: "#F77F00", secondary: "#009E60", accent: "#FFFFFF", coach: "Emerse Faé", captain: "Franck Kessié", stadium: "Stade Alassane Ouattara", style: "Power, fast transitions.", formation: "4-3-3", recentForm: ["W","W","D","W","L"], titles: 0 },
+  { id: "pan", name: "Panama", code: "PAN", flag: "🇵🇦", group: "H", confederation: "CONCACAF", fifaRank: 35, primary: "#DA121A", secondary: "#005AA7", accent: "#FFFFFF", coach: "Thomas Christiansen", captain: "Aníbal Godoy", stadium: "Estadio Rommel Fernández", style: "Defensive resilience, counter-attacks.", formation: "4-4-2", recentForm: ["D","W","L","W","D"], titles: 0 },
+  { id: "irq", name: "Iraq", code: "IRQ", flag: "🇮🇶", group: "H", confederation: "AFC", fifaRank: 58, primary: "#007A3D", secondary: "#CE1126", accent: "#FFFFFF", coach: "Graham Arnold", captain: "Aymen Hussein", stadium: "Basra International", style: "Industrious, defensive base.", formation: "4-1-4-1", recentForm: ["L","W","D","D","W"], titles: 0 },
 
   // Group I
-  { id: "por", name: "Portugal", code: "POR", flag: "🇵🇹", group: "I", confederation: "UEFA", fifaRank: 7, primary: "oklch(0.5 0.2 25)", secondary: "oklch(0.45 0.18 150)", accent: "oklch(0.85 0.18 95)", coach: "Roberto Martínez", captain: "Cristiano Ronaldo", stadium: "Estádio da Luz", style: "Technical possession, wing creativity.", formation: "4-3-3", recentForm: ["W","W","W","D","W"], titles: 0 },
-  { id: "col", name: "Colombia", code: "COL", flag: "🇨🇴", group: "I", confederation: "CONMEBOL", fifaRank: 12, primary: "oklch(0.85 0.18 95)", secondary: "oklch(0.4 0.18 260)", accent: "oklch(0.55 0.22 25)", coach: "Néstor Lorenzo", captain: "James Rodríguez", stadium: "Metropolitano", style: "Fluid midfield, James-orchestrated attacks.", formation: "4-2-3-1", recentForm: ["W","D","W","W","D"], titles: 0 },
-  { id: "alg", name: "Algeria", code: "ALG", flag: "🇩🇿", group: "I", confederation: "CAF", fifaRank: 34, primary: "oklch(0.45 0.18 150)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.55 0.22 25)", coach: "Vladimir Petković", captain: "Riyad Mahrez", stadium: "Stade du 5 Juillet", style: "Technical, possession-oriented.", formation: "4-3-3", recentForm: ["W","W","L","W","D"], titles: 0 },
-  { id: "jor", name: "Jordan", code: "JOR", flag: "🇯🇴", group: "I", confederation: "AFC", fifaRank: 64, primary: "oklch(0.45 0.18 25)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.45 0.18 150)", coach: "Jamal Sellami", captain: "Mousa Al-Tamari", stadium: "Amman International", style: "Counter-attacking, hard-working.", formation: "4-2-3-1", recentForm: ["W","D","W","L","D"], titles: 0 },
+  { id: "por", name: "Portugal", code: "POR", flag: "🇵🇹", group: "I", confederation: "UEFA", fifaRank: 7, primary: "#006600", secondary: "#FF0000", accent: "#FFE600", coach: "Roberto Martínez", captain: "Cristiano Ronaldo", stadium: "Estádio da Luz", style: "Technical possession, wing creativity.", formation: "4-3-3", recentForm: ["W","W","W","D","W"], titles: 0 },
+  { id: "col", name: "Colombia", code: "COL", flag: "🇨🇴", group: "I", confederation: "CONMEBOL", fifaRank: 12, primary: "#FCD116", secondary: "#003893", accent: "#CE1126", coach: "Néstor Lorenzo", captain: "James Rodríguez", stadium: "Metropolitano", style: "Fluid midfield, James-orchestrated attacks.", formation: "4-2-3-1", recentForm: ["W","D","W","W","D"], titles: 0 },
+  { id: "alg", name: "Algeria", code: "ALG", flag: "🇩🇿", group: "I", confederation: "CAF", fifaRank: 34, primary: "#006233", secondary: "#FFFFFF", accent: "#D21034", coach: "Vladimir Petković", captain: "Riyad Mahrez", stadium: "Stade du 5 Juillet", style: "Technical, possession-oriented.", formation: "4-3-3", recentForm: ["W","W","L","W","D"], titles: 0 },
+  { id: "jor", name: "Jordan", code: "JOR", flag: "🇯🇴", group: "I", confederation: "AFC", fifaRank: 64, primary: "#007A3D", secondary: "#CE1126", accent: "#000000", coach: "Jamal Sellami", captain: "Mousa Al-Tamari", stadium: "Amman International", style: "Counter-attacking, hard-working.", formation: "4-2-3-1", recentForm: ["W","D","W","L","D"], titles: 0 },
 
   // Group J
-  { id: "ita", name: "Italy", code: "ITA", flag: "🇮🇹", group: "J", confederation: "UEFA", fifaRank: 10, primary: "oklch(0.4 0.18 260)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.85 0.18 95)", coach: "Luciano Spalletti", captain: "Gianluigi Donnarumma", stadium: "Stadio Olimpico", style: "Possession-based, structured pressing.", formation: "4-3-3", recentForm: ["W","D","W","W","W"], titles: 4 },
-  { id: "chi", name: "Chile", code: "CHI", flag: "🇨🇱", group: "J", confederation: "CONMEBOL", fifaRank: 44, primary: "oklch(0.55 0.22 25)", secondary: "oklch(0.4 0.18 260)", accent: "oklch(0.98 0 0)", coach: "Ricardo Gareca", captain: "Arturo Vidal", stadium: "Estadio Nacional", style: "Intense pressing, technical midfield.", formation: "4-3-3", recentForm: ["D","W","L","D","W"], titles: 0 },
-  { id: "rsa", name: "South Africa", code: "RSA", flag: "🇿🇦", group: "J", confederation: "CAF", fifaRank: 53, primary: "oklch(0.45 0.18 150)", secondary: "oklch(0.85 0.18 95)", accent: "oklch(0.55 0.22 25)", coach: "Hugo Broos", captain: "Ronwen Williams", stadium: "FNB Stadium", style: "Possession-oriented, organized defense.", formation: "4-2-3-1", recentForm: ["W","W","D","W","L"], titles: 0 },
-  { id: "cub", name: "Curaçao", code: "CUW", flag: "🇨🇼", group: "J", confederation: "CONCACAF", fifaRank: 81, primary: "oklch(0.4 0.18 260)", secondary: "oklch(0.85 0.18 95)", accent: "oklch(0.98 0 0)", coach: "Dick Advocaat", captain: "Leandro Bacuna", stadium: "Ergilio Hato Stadium", style: "Quick transitions, set-piece threat.", formation: "4-4-2", recentForm: ["W","D","L","W","D"], titles: 0 },
+  { id: "ita", name: "Italy", code: "ITA", flag: "🇮🇹", group: "J", confederation: "UEFA", fifaRank: 10, primary: "#008C45", secondary: "#FFFFFF", accent: "#CD212A", coach: "Luciano Spalletti", captain: "Gianluigi Donnarumma", stadium: "Stadio Olimpico", style: "Possession-based, structured pressing.", formation: "4-3-3", recentForm: ["W","D","W","W","W"], titles: 4 },
+  { id: "chi", name: "Chile", code: "CHI", flag: "🇨🇱", group: "J", confederation: "CONMEBOL", fifaRank: 44, primary: "#D52B1E", secondary: "#0039A6", accent: "#FFFFFF", coach: "Ricardo Gareca", captain: "Arturo Vidal", stadium: "Estadio Nacional", style: "Intense pressing, technical midfield.", formation: "4-3-3", recentForm: ["D","W","L","D","W"], titles: 0 },
+  { id: "rsa", name: "South Africa", code: "RSA", flag: "🇿🇦", group: "J", confederation: "CAF", fifaRank: 53, primary: "#007A4D", secondary: "#FFB81C", accent: "#001489", coach: "Hugo Broos", captain: "Ronwen Williams", stadium: "FNB Stadium", style: "Possession-oriented, organized defense.", formation: "4-2-3-1", recentForm: ["W","W","D","W","L"], titles: 0 },
+  { id: "cub", name: "Curaçao", code: "CUW", flag: "🇨🇼", group: "J", confederation: "CONCACAF", fifaRank: 81, primary: "#002B7F", secondary: "#FCD116", accent: "#FFFFFF", coach: "Dick Advocaat", captain: "Leandro Bacuna", stadium: "Ergilio Hato Stadium", style: "Quick transitions, set-piece threat.", formation: "4-4-2", recentForm: ["W","D","L","W","D"], titles: 0 },
 
   // Group K
-  { id: "cro", name: "Croatia", code: "CRO", flag: "🇭🇷", group: "K", confederation: "UEFA", fifaRank: 15, primary: "oklch(0.55 0.22 25)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.4 0.18 260)", coach: "Zlatko Dalić", captain: "Luka Modrić", stadium: "Stadion Maksimir", style: "Midfield dominance, technical superiority.", formation: "4-3-3", recentForm: ["W","D","W","W","D"], titles: 0 },
-  { id: "par", name: "Paraguay", code: "PAR", flag: "🇵🇾", group: "K", confederation: "CONMEBOL", fifaRank: 49, primary: "oklch(0.55 0.22 25)", secondary: "oklch(0.4 0.18 260)", accent: "oklch(0.98 0 0)", coach: "Gustavo Alfaro", captain: "Gustavo Gómez", stadium: "Estadio Defensores", style: "Compact 4-4-2, physical play.", formation: "4-4-2", recentForm: ["W","L","D","W","W"], titles: 0 },
-  { id: "hai", name: "Haiti", code: "HAI", flag: "🇭🇹", group: "K", confederation: "CONCACAF", fifaRank: 83, primary: "oklch(0.4 0.18 260)", secondary: "oklch(0.55 0.22 25)", accent: "oklch(0.98 0 0)", coach: "Sébastien Migné", captain: "Duckens Nazon", stadium: "Stade Sylvio Cator", style: "Athletic, direct, transition-based.", formation: "4-3-3", recentForm: ["L","D","W","L","D"], titles: 0 },
-  { id: "gha", name: "Ghana", code: "GHA", flag: "🇬🇭", group: "K", confederation: "CAF", fifaRank: 51, primary: "oklch(0.55 0.22 25)", secondary: "oklch(0.85 0.18 95)", accent: "oklch(0.45 0.18 150)", coach: "Otto Addo", captain: "Mohammed Kudus", stadium: "Accra Sports Stadium", style: "Direct, powerful, fast wide forwards.", formation: "4-3-3", recentForm: ["W","D","W","L","W"], titles: 0 },
+  { id: "cro", name: "Croatia", code: "CRO", flag: "🇭🇷", group: "K", confederation: "UEFA", fifaRank: 15, primary: "#FF0000", secondary: "#FFFFFF", accent: "#171796", coach: "Zlatko Dalić", captain: "Luka Modrić", stadium: "Stadion Maksimir", style: "Midfield dominance, technical superiority.", formation: "4-3-3", recentForm: ["W","D","W","W","D"], titles: 0 },
+  { id: "par", name: "Paraguay", code: "PAR", flag: "🇵🇾", group: "K", confederation: "CONMEBOL", fifaRank: 49, primary: "#D52B1E", secondary: "#0038A8", accent: "#FFFFFF", coach: "Gustavo Alfaro", captain: "Gustavo Gómez", stadium: "Estadio Defensores", style: "Compact 4-4-2, physical play.", formation: "4-4-2", recentForm: ["W","L","D","W","W"], titles: 0 },
+  { id: "hai", name: "Haiti", code: "HAI", flag: "🇭🇹", group: "K", confederation: "CONCACAF", fifaRank: 83, primary: "#00209F", secondary: "#D21034", accent: "#FFFFFF", coach: "Sébastien Migné", captain: "Duckens Nazon", stadium: "Stade Sylvio Cator", style: "Athletic, direct, transition-based.", formation: "4-3-3", recentForm: ["L","D","W","L","D"], titles: 0 },
+  { id: "gha", name: "Ghana", code: "GHA", flag: "🇬🇭", group: "K", confederation: "CAF", fifaRank: 51, primary: "#006B3F", secondary: "#FCD116", accent: "#CE1126", coach: "Otto Addo", captain: "Mohammed Kudus", stadium: "Accra Sports Stadium", style: "Direct, powerful, fast wide forwards.", formation: "4-3-3", recentForm: ["W","D","W","L","W"], titles: 0 },
 
   // Group L
-  { id: "den", name: "Denmark", code: "DEN", flag: "🇩🇰", group: "L", confederation: "UEFA", fifaRank: 18, primary: "oklch(0.5 0.2 25)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.4 0.18 260)", coach: "Brian Riemer", captain: "Christian Eriksen", stadium: "Parken", style: "Organized, technical, Eriksen-led tempo.", formation: "3-4-2-1", recentForm: ["W","W","D","W","W"], titles: 0 },
-  { id: "nga", name: "Nigeria", code: "NGA", flag: "🇳🇬", group: "L", confederation: "CAF", fifaRank: 28, primary: "oklch(0.45 0.18 150)", secondary: "oklch(0.98 0 0)", accent: "oklch(0.55 0.22 25)", coach: "Eric Chelle", captain: "William Troost-Ekong", stadium: "Moshood Abiola", style: "Pace, power, Osimhen-focused attack.", formation: "4-2-3-1", recentForm: ["W","W","D","L","W"], titles: 0 },
-  { id: "ven", name: "Venezuela", code: "VEN", flag: "🇻🇪", group: "L", confederation: "CONMEBOL", fifaRank: 46, primary: "oklch(0.5 0.2 25)", secondary: "oklch(0.4 0.18 260)", accent: "oklch(0.85 0.18 95)", coach: "Fernando Batista", captain: "Salomón Rondón", stadium: "Estadio Monumental", style: "Compact midfield, fast counters.", formation: "4-2-3-1", recentForm: ["D","W","L","W","D"], titles: 0 },
-  { id: "njp", name: "New Caledonia", code: "NCL", flag: "🇳🇨", group: "L", confederation: "OFC", fifaRank: 152, primary: "oklch(0.4 0.18 260)", secondary: "oklch(0.55 0.22 25)", accent: "oklch(0.98 0 0)", coach: "Johan Sidaner", captain: "Georges Bearune", stadium: "Stade Numa-Daly", style: "Physical, defensive, route-one football.", formation: "5-4-1", recentForm: ["L","L","D","L","W"], titles: 0 },
+  { id: "den", name: "Denmark", code: "DEN", flag: "🇩🇰", group: "L", confederation: "UEFA", fifaRank: 18, primary: "#C8102E", secondary: "#FFFFFF", accent: "#000000", coach: "Brian Riemer", captain: "Christian Eriksen", stadium: "Parken", style: "Organized, technical, Eriksen-led tempo.", formation: "3-4-2-1", recentForm: ["W","W","D","W","W"], titles: 0 },
+  { id: "nga", name: "Nigeria", code: "NGA", flag: "🇳🇬", group: "L", confederation: "CAF", fifaRank: 28, primary: "#008751", secondary: "#FFFFFF", accent: "#000000", coach: "Eric Chelle", captain: "William Troost-Ekong", stadium: "Moshood Abiola", style: "Pace, power, Osimhen-focused attack.", formation: "4-2-3-1", recentForm: ["W","W","D","L","W"], titles: 0 },
+  { id: "ven", name: "Venezuela", code: "VEN", flag: "🇻🇪", group: "L", confederation: "CONMEBOL", fifaRank: 46, primary: "#FCD116", secondary: "#00247D", accent: "#CF142B", coach: "Fernando Batista", captain: "Salomón Rondón", stadium: "Estadio Monumental", style: "Compact midfield, fast counters.", formation: "4-2-3-1", recentForm: ["D","W","L","W","D"], titles: 0 },
+  { id: "njp", name: "New Caledonia", code: "NCL", flag: "🇳🇨", group: "L", confederation: "OFC", fifaRank: 152, primary: "#0035AD", secondary: "#ED1F25", accent: "#FFFFFF", coach: "Johan Sidaner", captain: "Georges Bearune", stadium: "Stade Numa-Daly", style: "Physical, defensive, route-one football.", formation: "5-4-1", recentForm: ["L","L","D","L","W"], titles: 0 },
 ];
 
 export const TEAM_MAP: Record<string, Team> = Object.fromEntries(TEAMS.map(t => [t.id, t]));
 
-// --- Squads (sample, with stars filled in for major nations) ----------------
+// --- Squads ----------------------------------------------------------------
 
 export const SQUADS: Record<string, Player[]> = {
   arg: [
@@ -208,7 +212,6 @@ export const SQUADS: Record<string, Player[]> = {
     { name: "Bernardo Silva", number: 10, position: "MF", age: 31, club: "Manchester City", caps: 100, goals: 12, rating: 8.7, notes: "Tireless creator." },
     { name: "Bruno Fernandes", number: 8, position: "MF", age: 31, club: "Manchester United", caps: 80, goals: 27, rating: 8.5, notes: "Set-piece master, leader." },
     { name: "Vitinha", number: 23, position: "MF", age: 26, club: "PSG", caps: 25, goals: 2, rating: 8.5, notes: "Smooth, intelligent midfielder." },
-    { name: "Bruno Fernandes", number: 18, position: "MF", age: 31, club: "Man Utd", caps: 80, goals: 27, rating: 8.6, notes: "" },
     { name: "Cristiano Ronaldo", number: 7, position: "FW", age: 41, club: "Al-Nassr", caps: 220, goals: 138, rating: 8.5, notes: "Captain. All-time international top scorer." },
     { name: "Rafael Leão", number: 17, position: "FW", age: 26, club: "Milan", caps: 28, goals: 4, rating: 8.4, notes: "Explosive left winger." },
   ],
@@ -248,79 +251,92 @@ export const SQUADS: Record<string, Player[]> = {
   ],
 };
 
-// Fallback minimal squads for teams not in the detailed map
 export function squadFor(teamId: string): Player[] {
   return SQUADS[teamId] ?? [];
 }
 
-// --- Matches ----------------------------------------------------------------
-// Tournament: June 11 – July 19, 2026. Times in UTC.
-// Group stage: 72 matches, but we ship a curated set of marquee fixtures.
+// --- Host Cities (16 venues, lat/lng for the interactive map) --------------
 
-export const VENUES: Record<string, { stadium: string; city: string }> = {
-  azteca: { stadium: "Estadio Azteca", city: "Mexico City" },
-  metlife: { stadium: "MetLife Stadium", city: "East Rutherford" },
-  sofi: { stadium: "SoFi Stadium", city: "Los Angeles" },
-  att: { stadium: "AT&T Stadium", city: "Dallas" },
-  hard: { stadium: "Hard Rock Stadium", city: "Miami" },
-  mercedes: { stadium: "Mercedes-Benz Stadium", city: "Atlanta" },
-  arrow: { stadium: "Arrowhead Stadium", city: "Kansas City" },
-  bmo: { stadium: "BMO Field", city: "Toronto" },
-  bcplace: { stadium: "BC Place", city: "Vancouver" },
-  monterrey: { stadium: "Estadio BBVA", city: "Monterrey" },
-  guadalajara: { stadium: "Estadio Akron", city: "Guadalajara" },
-  gilette: { stadium: "Gillette Stadium", city: "Boston" },
-  lincoln: { stadium: "Lincoln Financial Field", city: "Philadelphia" },
-  levi: { stadium: "Levi's Stadium", city: "San Francisco Bay Area" },
-  nrg: { stadium: "NRG Stadium", city: "Houston" },
-  seattle: { stadium: "Lumen Field", city: "Seattle" },
+export type HostCity = {
+  id: string;
+  city: string;
+  country: "USA" | "Canada" | "Mexico";
+  stadium: string;
+  capacity: number;
+  lat: number;
+  lng: number;
 };
 
-const v = (id: keyof typeof VENUES) => VENUES[id];
+export const HOST_CITIES: HostCity[] = [
+  { id: "azteca",      city: "Mexico City",     country: "Mexico", stadium: "Estadio Azteca",          capacity: 87000, lat: 19.3029, lng: -99.1505 },
+  { id: "guadalajara", city: "Guadalajara",     country: "Mexico", stadium: "Estadio Akron",           capacity: 49000, lat: 20.6817, lng: -103.4624 },
+  { id: "monterrey",   city: "Monterrey",       country: "Mexico", stadium: "Estadio BBVA",            capacity: 51000, lat: 25.6692, lng: -100.2440 },
+  { id: "bmo",         city: "Toronto",         country: "Canada", stadium: "BMO Field",                capacity: 45000, lat: 43.6326, lng: -79.4185 },
+  { id: "bcplace",     city: "Vancouver",       country: "Canada", stadium: "BC Place",                 capacity: 54500, lat: 49.2767, lng: -123.1118 },
+  { id: "metlife",     city: "New York / NJ",   country: "USA",    stadium: "MetLife Stadium",          capacity: 82500, lat: 40.8128, lng: -74.0742 },
+  { id: "sofi",        city: "Los Angeles",     country: "USA",    stadium: "SoFi Stadium",             capacity: 70000, lat: 33.9534, lng: -118.3387 },
+  { id: "att",         city: "Dallas",          country: "USA",    stadium: "AT&T Stadium",             capacity: 80000, lat: 32.7473, lng: -97.0945 },
+  { id: "hard",        city: "Miami",           country: "USA",    stadium: "Hard Rock Stadium",        capacity: 65000, lat: 25.9580, lng: -80.2389 },
+  { id: "mercedes",    city: "Atlanta",         country: "USA",    stadium: "Mercedes-Benz Stadium",    capacity: 71000, lat: 33.7553, lng: -84.4006 },
+  { id: "arrow",       city: "Kansas City",     country: "USA",    stadium: "Arrowhead Stadium",        capacity: 76000, lat: 39.0489, lng: -94.4839 },
+  { id: "gilette",     city: "Boston",          country: "USA",    stadium: "Gillette Stadium",         capacity: 65000, lat: 42.0909, lng: -71.2643 },
+  { id: "lincoln",     city: "Philadelphia",    country: "USA",    stadium: "Lincoln Financial Field", capacity: 69000, lat: 39.9008, lng: -75.1675 },
+  { id: "levi",        city: "San Francisco Bay", country: "USA",  stadium: "Levi's Stadium",           capacity: 68500, lat: 37.4030, lng: -121.9700 },
+  { id: "nrg",         city: "Houston",         country: "USA",    stadium: "NRG Stadium",              capacity: 72000, lat: 29.6847, lng: -95.4107 },
+  { id: "seattle",     city: "Seattle",         country: "USA",    stadium: "Lumen Field",              capacity: 69000, lat: 47.5952, lng: -122.3316 },
+];
+
+export const VENUE_MAP: Record<string, HostCity> = Object.fromEntries(HOST_CITIES.map(v => [v.id, v]));
+// Back-compat alias
+export const VENUES = VENUE_MAP;
+
+const vid = (id: string) => VENUE_MAP[id];
+
+// --- Matches ----------------------------------------------------------------
+// Times stored in UTC; displayed in Europe/Paris by default (see TIMEZONES).
+// Opening match: Mexico vs South Africa, June 11 2026 — Estadio Azteca (per editorial brief).
 
 export const MATCHES: Match[] = [
   // Opening
-  { id: "m1", group: "A", stage: "Group", homeId: "mex", awayId: "iri", kickoffUTC: "2026-06-11T19:00:00Z", venue: v("azteca").stadium, city: v("azteca").city, status: "scheduled" },
+  { id: "m1",  group: "A", stage: "Group", homeId: "mex", awayId: "rsa", kickoffUTC: "2026-06-11T19:00:00Z", venue: vid("azteca").stadium,      venueId: "azteca",      city: vid("azteca").city,      status: "scheduled" },
   // Day 2
-  { id: "m2", group: "B", stage: "Group", homeId: "can", awayId: "mar", kickoffUTC: "2026-06-12T20:00:00Z", venue: v("bmo").stadium, city: v("bmo").city, status: "scheduled" },
-  { id: "m3", group: "B", stage: "Group", homeId: "bel", awayId: "jpn", kickoffUTC: "2026-06-12T23:00:00Z", venue: v("gilette").stadium, city: v("gilette").city, status: "scheduled" },
-  // Big openers
-  { id: "m4", group: "C", stage: "Group", homeId: "usa", awayId: "ecu", kickoffUTC: "2026-06-13T00:00:00Z", venue: v("sofi").stadium, city: v("sofi").city, status: "scheduled" },
-  { id: "m5", group: "C", stage: "Group", homeId: "ger", awayId: "kor", kickoffUTC: "2026-06-13T19:00:00Z", venue: v("mercedes").stadium, city: v("mercedes").city, status: "scheduled" },
-  { id: "m6", group: "D", stage: "Group", homeId: "fra", awayId: "sen", kickoffUTC: "2026-06-13T22:00:00Z", venue: v("att").stadium, city: v("att").city, status: "scheduled" },
-  { id: "m7", group: "D", stage: "Group", homeId: "aus", awayId: "qat", kickoffUTC: "2026-06-14T01:00:00Z", venue: v("lincoln").stadium, city: v("lincoln").city, status: "scheduled" },
-  { id: "m8", group: "E", stage: "Group", homeId: "arg", awayId: "tun", kickoffUTC: "2026-06-14T19:00:00Z", venue: v("metlife").stadium, city: v("metlife").city, status: "scheduled" },
-  { id: "m9", group: "E", stage: "Group", homeId: "ned2", awayId: "nzl", kickoffUTC: "2026-06-14T22:00:00Z", venue: v("seattle").stadium, city: v("seattle").city, status: "scheduled" },
-  { id: "m10", group: "F", stage: "Group", homeId: "esp", awayId: "egy", kickoffUTC: "2026-06-15T19:00:00Z", venue: v("hard").stadium, city: v("hard").city, status: "scheduled" },
-  { id: "m11", group: "F", stage: "Group", homeId: "ksa", awayId: "cri", kickoffUTC: "2026-06-15T22:00:00Z", venue: v("nrg").stadium, city: v("nrg").city, status: "scheduled" },
-  { id: "m12", group: "G", stage: "Group", homeId: "bra", awayId: "sui", kickoffUTC: "2026-06-16T19:00:00Z", venue: v("levi").stadium, city: v("levi").city, status: "scheduled" },
-  { id: "m13", group: "G", stage: "Group", homeId: "cmr", awayId: "uzb", kickoffUTC: "2026-06-16T22:00:00Z", venue: v("arrow").stadium, city: v("arrow").city, status: "scheduled" },
-  { id: "m14", group: "H", stage: "Group", homeId: "eng", awayId: "irq", kickoffUTC: "2026-06-17T19:00:00Z", venue: v("bcplace").stadium, city: v("bcplace").city, status: "scheduled" },
-  { id: "m15", group: "H", stage: "Group", homeId: "civ", awayId: "pan", kickoffUTC: "2026-06-17T22:00:00Z", venue: v("monterrey").stadium, city: v("monterrey").city, status: "scheduled" },
-  { id: "m16", group: "I", stage: "Group", homeId: "por", awayId: "alg", kickoffUTC: "2026-06-18T19:00:00Z", venue: v("guadalajara").stadium, city: v("guadalajara").city, status: "scheduled" },
-  { id: "m17", group: "I", stage: "Group", homeId: "col", awayId: "jor", kickoffUTC: "2026-06-18T22:00:00Z", venue: v("metlife").stadium, city: v("metlife").city, status: "scheduled" },
-  { id: "m18", group: "J", stage: "Group", homeId: "ita", awayId: "chi", kickoffUTC: "2026-06-19T19:00:00Z", venue: v("att").stadium, city: v("att").city, status: "scheduled" },
-  { id: "m19", group: "J", stage: "Group", homeId: "rsa", awayId: "cub", kickoffUTC: "2026-06-19T22:00:00Z", venue: v("seattle").stadium, city: v("seattle").city, status: "scheduled" },
-  { id: "m20", group: "K", stage: "Group", homeId: "cro", awayId: "par", kickoffUTC: "2026-06-20T19:00:00Z", venue: v("hard").stadium, city: v("hard").city, status: "scheduled" },
-  { id: "m21", group: "K", stage: "Group", homeId: "hai", awayId: "gha", kickoffUTC: "2026-06-20T22:00:00Z", venue: v("nrg").stadium, city: v("nrg").city, status: "scheduled" },
-  { id: "m22", group: "L", stage: "Group", homeId: "den", awayId: "njp", kickoffUTC: "2026-06-21T19:00:00Z", venue: v("levi").stadium, city: v("levi").city, status: "scheduled" },
-  { id: "m23", group: "L", stage: "Group", homeId: "nga", awayId: "ven", kickoffUTC: "2026-06-21T22:00:00Z", venue: v("arrow").stadium, city: v("arrow").city, status: "scheduled" },
-  // Second round of group matches (selection)
-  { id: "m24", group: "A", stage: "Group", homeId: "ned", awayId: "uru", kickoffUTC: "2026-06-16T01:00:00Z", venue: v("levi").stadium, city: v("levi").city, status: "scheduled" },
-  { id: "m25", group: "D", stage: "Group", homeId: "fra", awayId: "aus", kickoffUTC: "2026-06-19T01:00:00Z", venue: v("att").stadium, city: v("att").city, status: "scheduled" },
-  { id: "m26", group: "E", stage: "Group", homeId: "arg", awayId: "ned2", kickoffUTC: "2026-06-19T22:00:00Z", venue: v("metlife").stadium, city: v("metlife").city, status: "scheduled" },
-  { id: "m27", group: "G", stage: "Group", homeId: "bra", awayId: "cmr", kickoffUTC: "2026-06-22T01:00:00Z", venue: v("hard").stadium, city: v("hard").city, status: "scheduled" },
-  { id: "m28", group: "H", stage: "Group", homeId: "eng", awayId: "civ", kickoffUTC: "2026-06-23T01:00:00Z", venue: v("bcplace").stadium, city: v("bcplace").city, status: "scheduled" },
-  // Knockouts (illustrative bracket entries)
-  { id: "ko1", group: "R32", stage: "R32", homeId: "arg", awayId: "kor", kickoffUTC: "2026-06-29T22:00:00Z", venue: v("metlife").stadium, city: v("metlife").city, status: "scheduled" },
-  { id: "ko2", group: "R32", stage: "R32", homeId: "fra", awayId: "mar", kickoffUTC: "2026-06-30T22:00:00Z", venue: v("att").stadium, city: v("att").city, status: "scheduled" },
-  { id: "ko3", group: "R16", stage: "R16", homeId: "bra", awayId: "eng", kickoffUTC: "2026-07-05T22:00:00Z", venue: v("sofi").stadium, city: v("sofi").city, status: "scheduled" },
-  { id: "ko4", group: "QF", stage: "QF", homeId: "esp", awayId: "ger", kickoffUTC: "2026-07-10T22:00:00Z", venue: v("mercedes").stadium, city: v("mercedes").city, status: "scheduled" },
-  { id: "ko5", group: "SF", stage: "SF", homeId: "arg", awayId: "fra", kickoffUTC: "2026-07-14T22:00:00Z", venue: v("att").stadium, city: v("att").city, status: "scheduled" },
-  { id: "ko6", group: "F", stage: "Final", homeId: "arg", awayId: "esp", kickoffUTC: "2026-07-19T19:00:00Z", venue: v("metlife").stadium, city: v("metlife").city, status: "scheduled" },
+  { id: "m2",  group: "B", stage: "Group", homeId: "can", awayId: "mar", kickoffUTC: "2026-06-12T20:00:00Z", venue: vid("bmo").stadium,         venueId: "bmo",         city: vid("bmo").city,         status: "scheduled" },
+  { id: "m3",  group: "B", stage: "Group", homeId: "bel", awayId: "jpn", kickoffUTC: "2026-06-12T23:00:00Z", venue: vid("gilette").stadium,     venueId: "gilette",     city: vid("gilette").city,     status: "scheduled" },
+  { id: "m4",  group: "C", stage: "Group", homeId: "usa", awayId: "ecu", kickoffUTC: "2026-06-13T00:00:00Z", venue: vid("sofi").stadium,        venueId: "sofi",        city: vid("sofi").city,        status: "scheduled" },
+  { id: "m5",  group: "C", stage: "Group", homeId: "ger", awayId: "kor", kickoffUTC: "2026-06-13T19:00:00Z", venue: vid("mercedes").stadium,    venueId: "mercedes",    city: vid("mercedes").city,    status: "scheduled" },
+  { id: "m6",  group: "D", stage: "Group", homeId: "fra", awayId: "sen", kickoffUTC: "2026-06-13T22:00:00Z", venue: vid("att").stadium,         venueId: "att",         city: vid("att").city,         status: "scheduled" },
+  { id: "m7",  group: "D", stage: "Group", homeId: "aus", awayId: "qat", kickoffUTC: "2026-06-14T01:00:00Z", venue: vid("lincoln").stadium,     venueId: "lincoln",     city: vid("lincoln").city,     status: "scheduled" },
+  { id: "m8",  group: "E", stage: "Group", homeId: "arg", awayId: "tun", kickoffUTC: "2026-06-14T19:00:00Z", venue: vid("metlife").stadium,     venueId: "metlife",     city: vid("metlife").city,     status: "scheduled" },
+  { id: "m9",  group: "E", stage: "Group", homeId: "ned2", awayId: "nzl", kickoffUTC: "2026-06-14T22:00:00Z", venue: vid("seattle").stadium,    venueId: "seattle",     city: vid("seattle").city,     status: "scheduled" },
+  { id: "m10", group: "F", stage: "Group", homeId: "esp", awayId: "egy", kickoffUTC: "2026-06-15T19:00:00Z", venue: vid("hard").stadium,        venueId: "hard",        city: vid("hard").city,        status: "scheduled" },
+  { id: "m11", group: "F", stage: "Group", homeId: "ksa", awayId: "cri", kickoffUTC: "2026-06-15T22:00:00Z", venue: vid("nrg").stadium,         venueId: "nrg",         city: vid("nrg").city,         status: "scheduled" },
+  { id: "m12", group: "G", stage: "Group", homeId: "bra", awayId: "sui", kickoffUTC: "2026-06-16T19:00:00Z", venue: vid("levi").stadium,        venueId: "levi",        city: vid("levi").city,        status: "scheduled" },
+  { id: "m13", group: "G", stage: "Group", homeId: "cmr", awayId: "uzb", kickoffUTC: "2026-06-16T22:00:00Z", venue: vid("arrow").stadium,       venueId: "arrow",       city: vid("arrow").city,       status: "scheduled" },
+  { id: "m14", group: "H", stage: "Group", homeId: "eng", awayId: "irq", kickoffUTC: "2026-06-17T19:00:00Z", venue: vid("bcplace").stadium,     venueId: "bcplace",     city: vid("bcplace").city,     status: "scheduled" },
+  { id: "m15", group: "H", stage: "Group", homeId: "civ", awayId: "pan", kickoffUTC: "2026-06-17T22:00:00Z", venue: vid("monterrey").stadium,   venueId: "monterrey",   city: vid("monterrey").city,   status: "scheduled" },
+  { id: "m16", group: "I", stage: "Group", homeId: "por", awayId: "alg", kickoffUTC: "2026-06-18T19:00:00Z", venue: vid("guadalajara").stadium, venueId: "guadalajara", city: vid("guadalajara").city, status: "scheduled" },
+  { id: "m17", group: "I", stage: "Group", homeId: "col", awayId: "jor", kickoffUTC: "2026-06-18T22:00:00Z", venue: vid("metlife").stadium,     venueId: "metlife",     city: vid("metlife").city,     status: "scheduled" },
+  { id: "m18", group: "J", stage: "Group", homeId: "ita", awayId: "chi", kickoffUTC: "2026-06-19T19:00:00Z", venue: vid("att").stadium,         venueId: "att",         city: vid("att").city,         status: "scheduled" },
+  { id: "m19", group: "J", stage: "Group", homeId: "rsa", awayId: "cub", kickoffUTC: "2026-06-19T22:00:00Z", venue: vid("seattle").stadium,     venueId: "seattle",     city: vid("seattle").city,     status: "scheduled" },
+  { id: "m20", group: "K", stage: "Group", homeId: "cro", awayId: "par", kickoffUTC: "2026-06-20T19:00:00Z", venue: vid("hard").stadium,        venueId: "hard",        city: vid("hard").city,        status: "scheduled" },
+  { id: "m21", group: "K", stage: "Group", homeId: "hai", awayId: "gha", kickoffUTC: "2026-06-20T22:00:00Z", venue: vid("nrg").stadium,         venueId: "nrg",         city: vid("nrg").city,         status: "scheduled" },
+  { id: "m22", group: "L", stage: "Group", homeId: "den", awayId: "njp", kickoffUTC: "2026-06-21T19:00:00Z", venue: vid("levi").stadium,        venueId: "levi",        city: vid("levi").city,        status: "scheduled" },
+  { id: "m23", group: "L", stage: "Group", homeId: "nga", awayId: "ven", kickoffUTC: "2026-06-21T22:00:00Z", venue: vid("arrow").stadium,       venueId: "arrow",       city: vid("arrow").city,       status: "scheduled" },
+  { id: "m24", group: "A", stage: "Group", homeId: "ned", awayId: "uru", kickoffUTC: "2026-06-16T01:00:00Z", venue: vid("levi").stadium,        venueId: "levi",        city: vid("levi").city,        status: "scheduled" },
+  { id: "m25", group: "D", stage: "Group", homeId: "fra", awayId: "aus", kickoffUTC: "2026-06-19T01:00:00Z", venue: vid("att").stadium,         venueId: "att",         city: vid("att").city,         status: "scheduled" },
+  { id: "m26", group: "E", stage: "Group", homeId: "arg", awayId: "ned2", kickoffUTC: "2026-06-19T22:00:00Z", venue: vid("metlife").stadium,    venueId: "metlife",     city: vid("metlife").city,     status: "scheduled" },
+  { id: "m27", group: "G", stage: "Group", homeId: "bra", awayId: "cmr", kickoffUTC: "2026-06-22T01:00:00Z", venue: vid("hard").stadium,        venueId: "hard",        city: vid("hard").city,        status: "scheduled" },
+  { id: "m28", group: "H", stage: "Group", homeId: "eng", awayId: "civ", kickoffUTC: "2026-06-23T01:00:00Z", venue: vid("bcplace").stadium,     venueId: "bcplace",     city: vid("bcplace").city,     status: "scheduled" },
+  // Knockouts
+  { id: "ko1", group: "R32", stage: "R32",   homeId: "arg", awayId: "kor", kickoffUTC: "2026-06-29T22:00:00Z", venue: vid("metlife").stadium,  venueId: "metlife",  city: vid("metlife").city,  status: "scheduled" },
+  { id: "ko2", group: "R32", stage: "R32",   homeId: "fra", awayId: "mar", kickoffUTC: "2026-06-30T22:00:00Z", venue: vid("att").stadium,      venueId: "att",      city: vid("att").city,      status: "scheduled" },
+  { id: "ko3", group: "R16", stage: "R16",   homeId: "bra", awayId: "eng", kickoffUTC: "2026-07-05T22:00:00Z", venue: vid("sofi").stadium,     venueId: "sofi",     city: vid("sofi").city,     status: "scheduled" },
+  { id: "ko4", group: "QF",  stage: "QF",    homeId: "esp", awayId: "ger", kickoffUTC: "2026-07-10T22:00:00Z", venue: vid("mercedes").stadium, venueId: "mercedes", city: vid("mercedes").city, status: "scheduled" },
+  { id: "ko5", group: "SF",  stage: "SF",    homeId: "arg", awayId: "fra", kickoffUTC: "2026-07-14T22:00:00Z", venue: vid("att").stadium,      venueId: "att",      city: vid("att").city,      status: "scheduled" },
+  { id: "ko6", group: "F",   stage: "Final", homeId: "arg", awayId: "esp", kickoffUTC: "2026-07-19T19:00:00Z", venue: vid("metlife").stadium,  venueId: "metlife",  city: vid("metlife").city,  status: "scheduled" },
 ];
 
-// --- Standings (simulated, will compute zeroes if matches not played) -------
+// --- Standings --------------------------------------------------------------
 
 export type StandingRow = {
   teamId: string;
@@ -357,48 +373,56 @@ export function computeStandings(group: string): StandingRow[] {
 
 export const GROUPS = ["A","B","C","D","E","F","G","H","I","J","K","L"];
 
-// --- Injuries ---------------------------------------------------------------
+// --- Injuries (mock medical-room dataset) ----------------------------------
 
 export const INJURIES: Injury[] = [
-  { player: "Gavi", teamId: "esp", injury: "ACL recovery", status: "Doubtful", expected: "Late group stage" },
-  { player: "Karim Adeyemi", teamId: "ger", injury: "Hamstring strain", status: "Out", expected: "R16" },
-  { player: "Marcus Rashford", teamId: "eng", injury: "Ankle sprain", status: "Doubtful", expected: "Match 2" },
-  { player: "Neymar", teamId: "bra", injury: "Knee — late recovery", status: "Returning", expected: "R16" },
-  { player: "Antoine Griezmann", teamId: "fra", injury: "Calf knock", status: "Doubtful", expected: "Match 1 game-time decision" },
-  { player: "Pedri", teamId: "esp", injury: "Muscle fatigue", status: "Doubtful", expected: "Match 1" },
-  { player: "Lautaro Martínez", teamId: "arg", injury: "Minor groin", status: "Returning", expected: "Match 1" },
-  { player: "Achraf Hakimi", teamId: "mar", injury: "Ankle", status: "Returning", expected: "Match 1" },
-  { player: "Reece James", teamId: "eng", injury: "Hamstring", status: "Out", expected: "QF" },
-  { player: "Vinícius Jr.", teamId: "bra", injury: "Knock — precaution", status: "Returning", expected: "Match 1" },
-  { player: "Sergiño Dest", teamId: "usa", injury: "ACL recovery", status: "Returning", expected: "Match 2" },
-  { player: "Joshua Kimmich", teamId: "ger", injury: "Knee — minor", status: "Doubtful", expected: "Match 1" },
-  { player: "Rúben Dias", teamId: "por", injury: "Thigh", status: "Doubtful", expected: "Match 1" },
-  { player: "Kalidou Koulibaly", teamId: "sen", injury: "Knee", status: "Out", expected: "Group stage" },
+  { player: "Gavi",                teamId: "esp", injury: "ACL — return to play protocol",   status: "Doubtful",  expected: "2026-06-22", updated: "2026-05-28" },
+  { player: "Karim Adeyemi",       teamId: "ger", injury: "Hamstring strain (grade 2)",      status: "Out",       expected: "2026-07-02", updated: "2026-05-30" },
+  { player: "Marcus Rashford",     teamId: "eng", injury: "Right ankle sprain",              status: "Doubtful",  expected: "2026-06-19", updated: "2026-06-01" },
+  { player: "Neymar Jr.",          teamId: "bra", injury: "Knee — meniscus reconditioning",  status: "Returning", expected: "2026-06-30", updated: "2026-05-25" },
+  { player: "Antoine Griezmann",   teamId: "fra", injury: "Right calf — minor strain",       status: "Doubtful",  expected: "2026-06-13", updated: "2026-06-02" },
+  { player: "Pedri",               teamId: "esp", injury: "Muscle fatigue / overload",       status: "Doubtful",  expected: "2026-06-15", updated: "2026-06-02" },
+  { player: "Lautaro Martínez",    teamId: "arg", injury: "Right adductor — low grade",      status: "Returning", expected: "2026-06-14", updated: "2026-06-03" },
+  { player: "Achraf Hakimi",       teamId: "mar", injury: "Left ankle — sprain",             status: "Returning", expected: "2026-06-12", updated: "2026-06-01" },
+  { player: "Reece James",         teamId: "eng", injury: "Hamstring tear",                  status: "Out",       expected: "2026-07-11", updated: "2026-05-27" },
+  { player: "Vinícius Jr.",        teamId: "bra", injury: "Right thigh — precaution",        status: "Returning", expected: "2026-06-16", updated: "2026-06-02" },
+  { player: "Sergiño Dest",        teamId: "usa", injury: "ACL — late-stage recovery",       status: "Returning", expected: "2026-06-18", updated: "2026-05-29" },
+  { player: "Joshua Kimmich",      teamId: "ger", injury: "Right knee — minor sprain",       status: "Doubtful",  expected: "2026-06-13", updated: "2026-06-03" },
+  { player: "Rúben Dias",          teamId: "por", injury: "Thigh contusion",                 status: "Doubtful",  expected: "2026-06-18", updated: "2026-06-01" },
+  { player: "Kalidou Koulibaly",   teamId: "sen", injury: "Right knee — partial MCL",        status: "Out",       expected: "2026-06-25", updated: "2026-05-26" },
+  { player: "Mohamed Salah",       teamId: "egy", injury: "Hamstring tightness",             status: "Returning", expected: "2026-06-15", updated: "2026-06-02" },
+  { player: "Son Heung-min",       teamId: "kor", injury: "Right hamstring — grade 1",       status: "Doubtful",  expected: "2026-06-17", updated: "2026-06-03" },
+  { player: "Christian Pulisic",   teamId: "usa", injury: "Quadriceps — light training",     status: "Returning", expected: "2026-06-13", updated: "2026-06-04" },
+  { player: "Florian Wirtz",       teamId: "ger", injury: "Right ankle — knock",             status: "Returning", expected: "2026-06-13", updated: "2026-06-04" },
+  { player: "Bruno Fernandes",     teamId: "por", injury: "Lower back spasm",                status: "Doubtful",  expected: "2026-06-18", updated: "2026-06-02" },
+  { player: "Erling Haaland",      teamId: "ned2", injury: "Left foot — bone bruise",        status: "Doubtful",  expected: "2026-06-14", updated: "2026-06-03" },
 ];
 
-// --- Timezones --------------------------------------------------------------
+// --- Timezones (Europe/Paris is the editorial default) ---------------------
 
 export const TIMEZONES: { id: string; label: string }[] = [
-  { id: "America/Los_Angeles", label: "Los Angeles (PT)" },
-  { id: "America/Denver", label: "Denver (MT)" },
-  { id: "America/Mexico_City", label: "Mexico City (CT)" },
-  { id: "America/Chicago", label: "Chicago (CT)" },
-  { id: "America/New_York", label: "New York (ET)" },
-  { id: "America/Toronto", label: "Toronto (ET)" },
-  { id: "America/Sao_Paulo", label: "São Paulo (BRT)" },
-  { id: "Europe/London", label: "London (BST)" },
-  { id: "Europe/Paris", label: "Paris (CEST)" },
-  { id: "Europe/Madrid", label: "Madrid (CEST)" },
-  { id: "Africa/Casablanca", label: "Casablanca (WEST)" },
-  { id: "Asia/Dubai", label: "Dubai (GST)" },
-  { id: "Asia/Tokyo", label: "Tokyo (JST)" },
-  { id: "Australia/Sydney", label: "Sydney (AEST)" },
-  { id: "UTC", label: "UTC" },
+  { id: "Europe/Paris",         label: "Paris (Heure de Paris)" },
+  { id: "Europe/London",        label: "London" },
+  { id: "Europe/Madrid",        label: "Madrid" },
+  { id: "Africa/Casablanca",    label: "Casablanca" },
+  { id: "America/New_York",     label: "New York" },
+  { id: "America/Toronto",      label: "Toronto" },
+  { id: "America/Chicago",      label: "Chicago" },
+  { id: "America/Denver",       label: "Denver" },
+  { id: "America/Mexico_City",  label: "Mexico City" },
+  { id: "America/Los_Angeles",  label: "Los Angeles" },
+  { id: "America/Sao_Paulo",    label: "São Paulo" },
+  { id: "Asia/Dubai",           label: "Dubai" },
+  { id: "Asia/Tokyo",           label: "Tokyo" },
+  { id: "Australia/Sydney",     label: "Sydney" },
+  { id: "UTC",                  label: "UTC" },
 ];
+
+export const DEFAULT_TZ = "Europe/Paris";
 
 export function formatKickoff(iso: string, tz: string) {
   const d = new Date(iso);
-  const date = d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric", timeZone: tz });
-  const time = d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", timeZone: tz });
+  const date = d.toLocaleDateString("en-GB", { weekday: "short", month: "short", day: "numeric", timeZone: tz });
+  const time = d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: tz, hour12: false });
   return { date, time };
 }
