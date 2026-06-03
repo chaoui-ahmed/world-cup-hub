@@ -50,6 +50,9 @@ function MatchesPage() {
         <div>
           <p className="text-xs uppercase tracking-[0.18em] text-neutral-500">Fixtures</p>
           <h1 className="mt-2 text-4xl font-bold tracking-tight text-neutral-900">Every match. Your time.</h1>
+          <p className="mt-2 text-sm text-neutral-500">
+            Times displayed in <span className="font-medium text-neutral-700">{tz === "Europe/Paris" ? "Heure de Paris (CEST)" : tz}</span>. Change the timezone anytime.
+          </p>
         </div>
         <TimezoneSelect value={tz} onChange={setTzAndSave} />
       </header>

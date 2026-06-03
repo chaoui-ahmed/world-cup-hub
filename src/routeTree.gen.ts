@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MatchesRouteImport } from './routes/matches'
+import { Route as MapRouteImport } from './routes/map'
 import { Route as InjuriesRouteImport } from './routes/injuries'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TeamsIndexRouteImport } from './routes/teams.index'
@@ -18,6 +19,11 @@ import { Route as TeamsTeamIdRouteImport } from './routes/teams.$teamId'
 const MatchesRoute = MatchesRouteImport.update({
   id: '/matches',
   path: '/matches',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MapRoute = MapRouteImport.update({
+  id: '/map',
+  path: '/map',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InjuriesRoute = InjuriesRouteImport.update({
@@ -44,6 +50,7 @@ const TeamsTeamIdRoute = TeamsTeamIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/injuries': typeof InjuriesRoute
+  '/map': typeof MapRoute
   '/matches': typeof MatchesRoute
   '/teams/$teamId': typeof TeamsTeamIdRoute
   '/teams/': typeof TeamsIndexRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/injuries': typeof InjuriesRoute
+  '/map': typeof MapRoute
   '/matches': typeof MatchesRoute
   '/teams/$teamId': typeof TeamsTeamIdRoute
   '/teams': typeof TeamsIndexRoute
@@ -59,21 +67,36 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/injuries': typeof InjuriesRoute
+  '/map': typeof MapRoute
   '/matches': typeof MatchesRoute
   '/teams/$teamId': typeof TeamsTeamIdRoute
   '/teams/': typeof TeamsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/injuries' | '/matches' | '/teams/$teamId' | '/teams/'
+  fullPaths:
+    | '/'
+    | '/injuries'
+    | '/map'
+    | '/matches'
+    | '/teams/$teamId'
+    | '/teams/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/injuries' | '/matches' | '/teams/$teamId' | '/teams'
-  id: '__root__' | '/' | '/injuries' | '/matches' | '/teams/$teamId' | '/teams/'
+  to: '/' | '/injuries' | '/map' | '/matches' | '/teams/$teamId' | '/teams'
+  id:
+    | '__root__'
+    | '/'
+    | '/injuries'
+    | '/map'
+    | '/matches'
+    | '/teams/$teamId'
+    | '/teams/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   InjuriesRoute: typeof InjuriesRoute
+  MapRoute: typeof MapRoute
   MatchesRoute: typeof MatchesRoute
   TeamsTeamIdRoute: typeof TeamsTeamIdRoute
   TeamsIndexRoute: typeof TeamsIndexRoute
@@ -86,6 +109,13 @@ declare module '@tanstack/react-router' {
       path: '/matches'
       fullPath: '/matches'
       preLoaderRoute: typeof MatchesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/map': {
+      id: '/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof MapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/injuries': {
@@ -122,6 +152,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   InjuriesRoute: InjuriesRoute,
+  MapRoute: MapRoute,
   MatchesRoute: MatchesRoute,
   TeamsTeamIdRoute: TeamsTeamIdRoute,
   TeamsIndexRoute: TeamsIndexRoute,
