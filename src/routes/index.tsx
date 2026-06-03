@@ -70,7 +70,7 @@ function Index() {
         <div className="flex items-end justify-between mb-8">
           <div>
             <h2 className="text-3xl font-bold tracking-tight text-neutral-900">Up next</h2>
-            <p className="mt-1 text-sm text-neutral-500">Shown in your local time. Adjust on the matches page.</p>
+            <p className="mt-1 text-sm text-neutral-500">Times shown in Heure de Paris by default. Change the timezone on the matches page.</p>
           </div>
           <Link to="/matches" className="text-sm font-medium text-neutral-900 hover:underline underline-offset-4">All matches →</Link>
         </div>
